@@ -1,46 +1,51 @@
 import { useEffect, useState } from "react";
 import {calculatePercentage} from './utils/calculatePercentage'
+import SignUp from "./components/SignUp"; 
+import SocketConnection from "./components/SocketConnection";
+import UsersCollection from "./components/UsersCollection";
 
 function App() {
+  const [userName, serUserName] = useState('')
   const [ws, setWs] = useState(null);
+
   const [chunks, setChunks] = useState([])
   const [fileName, setFileName] = useState('')
 
   const [percentage, setPercentage] = useState(0)
   const [uploadPercentage, setUploadPercentage] = useState(0)
 
-  useEffect(() => {
-    const websocket = new WebSocket('ws://172.236.212.109:8080');
+  // useEffect(() => {
+  //   const websocket = new WebSocket('ws://localhost:8080');
+ 
+  //   websocket.onopen = () => {
+  //     console.log('WebSocket is connected');
+  //   };
 
-    websocket.onopen = () => {
-      console.log('WebSocket is connected');
-    };
+  //   websocket.onmessage = (evt) => {
+  //     const message = (evt.data);
+  //     const jsonMessage = JSON.parse(message)
+  //     console.log(jsonMessage)
 
-    websocket.onmessage = (evt) => {
-      const message = (evt.data);
-      const jsonMessage = JSON.parse(message)
-      console.log(jsonMessage)
+  //     if (jsonMessage.fileName) {
+  //       setFileName(jsonMessage.fileName)
+  //     }
 
-      if (jsonMessage.fileName) {
-        setFileName(jsonMessage.fileName)
-      }
+  //     console.log(jsonMessage)
+  //     setPercentage(calculatePercentage(jsonMessage.chunkIndex, jsonMessage.totalChunks))
 
-      console.log(jsonMessage)
-      setPercentage(calculatePercentage(jsonMessage.chunkIndex, jsonMessage.totalChunks))
+  //     handleReceiveChunk(jsonMessage.buffer)
+  //   };
 
-      handleReceiveChunk(jsonMessage.buffer)
-    };
+  //   websocket.onclose = () => {
+  //     console.log('WebSocket is closed');
+  //   };
 
-    websocket.onclose = () => {
-      console.log('WebSocket is closed');
-    };
+  //   setWs(websocket);
 
-    setWs(websocket);
-
-    return () => {
-      websocket.close();
-    };
-  }, []);
+  //   return () => {
+  //     websocket.close();
+  //   };
+  // }, []);
 
   const handleReceiveChunk = (chunk) => {
     const data = chunk.data;
@@ -131,10 +136,17 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className="w-full h-full">
       
-
-      <form action="">
+      {
+        userName ? <>
+          <SocketConnection ws={ws} setWs={setWs} userName={userName}/>
+          <UsersCollection ws={ws} userName={userName}/>
+        </> : <SignUp ws={ws} setUserName={serUserName}/>
+      }
+      
+      
+      {/* <form action="">
         <label>File upload</label>
         <input type="file" onChange={handleFileChange} />
       </form>
@@ -149,7 +161,7 @@ function App() {
         percentage === 100 && <button onClick={handleDownload} disabled={chunks.length === 0} className="border border-black">
         Download {fileName}
       </button>
-      }
+      } */}
     </div>
   );
 }
