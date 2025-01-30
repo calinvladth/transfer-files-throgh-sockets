@@ -1,16 +1,10 @@
 {
-    "emmet.includeLanguages": {
-        "javascript": "javascriptreact"
-    },
-    "emmet.syntaxProfiles": {
-        "javascript": "jsx"
-    },
-    "[javascript]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    "[typescript]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    "eslint.format.enable": true,
-    "editor.formatOnSave": true,
+  "source.fixAll": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  },
+  "emmet.syntaxProfiles": {
+    "javascript": "jsx"
+  }
 }
