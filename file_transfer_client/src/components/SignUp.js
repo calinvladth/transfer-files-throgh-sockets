@@ -4,24 +4,31 @@ import api from "../api";
 function SignUp({ setUserName }) {
   const [name, setName] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     (async () => {
       const storageUserName = sessionStorage.getItem("username");
-      if (storageUserName) {
-        const response = await api.signup(storageUserName);
-        if (!response) {
-          return;
-        }
 
-        setUserName(storageUserName);
+      if (!storageUserName) {
+        setLoaded(true);
+        return;
       }
+
+      const response = await api.signup(storageUserName);
+
+      if (!response) {
+        setLoaded(true);
+        return;
+      }
+
+      setUserName(storageUserName);
     })();
 
     return () => {
       setName("");
     };
-  }, []);
+  }, [setUserName]);
 
   async function submit(e) {
     e.preventDefault();
@@ -41,6 +48,10 @@ function SignUp({ setUserName }) {
     } catch (err) {
       setResponseMessage(err.response.data);
     }
+  }
+
+  if (!loaded) {
+    return <p>Loading ...</p>;
   }
 
   return (

@@ -54,6 +54,7 @@ function SendFiles({ ws, collection }) {
               data: base64Chunk.split(",")[1],
               totalChunks,
               fileName: file.name,
+              fileSize: file.size,
               collection,
             })
           );
@@ -66,33 +67,26 @@ function SendFiles({ ws, collection }) {
 
   return (
     <div className="border border-black p-7">
-      <form action="">
-        <label className="mb-3" for="small_size">
-          Send file to collection
-        </label>
-        <input
-          type="file"
-          multiple
-          onChange={handleFileChange}
-          className="block w-full text-xs cursor-pointer focus:outline-none py-3"
-        ></input>
-      </form>
+      <div className="flex justify-between items-center font-semibold">
+        <p>Send files to collection</p>
+      </div>
+      <input
+        type="file"
+        multiple
+        onChange={handleFileChange}
+        className="block w-full text-xs cursor-pointer focus:outline-none py-3"
+      ></input>
 
-      <>
-        <p>Uploading</p>
-        <ul>
-          {Array.from(map.entries()).map(([key, value]) => (
-            <li className="list-disc list-inside">
-              {key.name} {formatFileSize(key.size)}{" "}
-              <span
-                className={value === "100" ? "text-green-500" : "text-black"}
-              >
-                {value}%
-              </span>
-            </li>
-          ))}
-        </ul>
-      </>
+      <ul>
+        {Array.from(map.entries()).map(([key, value]) => (
+          <li className="flex justify-between items-center border-b border-black py-3">
+            {key.name} {formatFileSize(key.size)}{" "}
+            <span className={value === "100" ? "text-green-500" : "text-black"}>
+              {value}%
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

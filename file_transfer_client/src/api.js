@@ -1,9 +1,9 @@
 import axios from "axios";
+import config from "./config";
 
 async function signup(name) {
   try {
-    console.log(name);
-    const response = await axios.post("http://localhost:3001/signup", {
+    const response = await axios.post(`${config.URLS.API}/signup`, {
       name,
     });
 

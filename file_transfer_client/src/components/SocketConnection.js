@@ -1,8 +1,9 @@
 import { useEffect } from "react";
+import config from "../config";
 
 function SocketConnection({ ws, setWs, userName, setUserName }) {
   useEffect(() => {
-    const websocket = new WebSocket(`ws://localhost:8080?username=${userName}`);
+    const websocket = new WebSocket(`${config.URLS.WS}?username=${userName}`);
     websocket.onopen = () => {
       console.log(`WebSocket is connected for ${userName}`);
     };
@@ -14,7 +15,7 @@ function SocketConnection({ ws, setWs, userName, setUserName }) {
     setWs(websocket);
 
     return () => {};
-  }, []);
+  }, [userName, setWs]);
 
   function disconnect() {
     sessionStorage.removeItem("username");

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { calculatePercentage } from "../utils/calculatePercentage";
+import { formatFileSize } from "../utils/formatFileSize";
 
 function ReceiveFiles({ ws }) {
-  const [chunks, setChunks] = useState([]);
   const [map, setMap] = useState(new Map());
 
   useEffect(() => {
@@ -13,14 +13,6 @@ function ReceiveFiles({ ws }) {
         const jsonMessage = JSON.parse(message);
 
         if (jsonMessage.type !== "clientChunk") {
-          return;
-        }
-
-        if (!jsonMessage.fileName) {
-          return;
-        }
-
-        if (!jsonMessage.from) {
           return;
         }
 
@@ -38,11 +30,13 @@ function ReceiveFiles({ ws }) {
             jsonMessage.totalChunks
           ).toFixed(0),
           from: jsonMessage.from,
+          size: jsonMessage.fileSize,
           chunks: newMap.get(jsonMessage.fileName)?.chunks
             ? [...newMap.get(jsonMessage.fileName).chunks, uint8Array]
             : [uint8Array],
         });
 
+        console.log(newMap.get(jsonMessage.fileName));
         setMap(new Map(newMap));
       };
     }
@@ -55,7 +49,7 @@ function ReceiveFiles({ ws }) {
       return;
     }
 
-    // TODO: Find other way for this shit
+    // TODO: Find other way for this thing
 
     // Combine chunks into a single Blob
     const blob = new Blob(file.chunks, { type: "application/octet-stream" });
@@ -75,26 +69,34 @@ function ReceiveFiles({ ws }) {
     URL.revokeObjectURL(url);
   };
 
-  // If map empty return
+  if (map.size === 0) {
+    return;
+  }
 
   return (
     <div className="w-full border border-black p-7">
-      <p>Received files</p>
+      <div className="flex justify-between items-center font-semibold">
+        <p>Received files</p>
+        <p>From</p>
+      </div>
       <ul>
         {Array.from(map.entries()).map(([key, value]) => (
           <li
             onClick={() => handleDownload(key)}
             key={key}
-            className={`list-disc list-inside ${
+            className={`flex justify-between items-center border-b border-black py-3 ${
               value.percentage === "100" && "cursor-pointer"
             }`}
           >
-            {key}{" "}
-            <span
-              className={`${value.percentage === "100" && "text-green-500"}`}
-            >
-              {value.percentage}%
-            </span>{" "}
+            <div className="flex gap-2">
+              <span>{key}</span>
+              {formatFileSize(value.size)}{" "}
+              <span
+                className={`${value.percentage === "100" && "text-green-500"}`}
+              >
+                {value.percentage}%
+              </span>
+            </div>
             {value.from}
           </li>
         ))}

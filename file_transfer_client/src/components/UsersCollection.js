@@ -42,7 +42,7 @@ function UsersCollection({ userName, collection, setCollection }) {
 
   return (
     <div className="w-full p-7 border border-black">
-      <p>Add user to send files to</p>
+      <p className="font-semibold">Add user to collection</p>
       <form onSubmit={submit} className="flex flex-col gap-3 mt-3">
         <input
           type="text"
@@ -61,7 +61,7 @@ function UsersCollection({ userName, collection, setCollection }) {
       <div className="w-full mt-3">
         {collection.length > 0 ? (
           <>
-            <p>Users collection</p>
+            <p className="font-semibold">Collection</p>
             <ul>
               {collection.map((o) => (
                 <li key={o} className="list-disc list-inside text-green-500">
@@ -71,7 +71,7 @@ function UsersCollection({ userName, collection, setCollection }) {
             </ul>
           </>
         ) : (
-          <p>Empty collection</p>
+          <p className="font-semibold">Empty collection</p>
         )}
       </div>
     </div>
