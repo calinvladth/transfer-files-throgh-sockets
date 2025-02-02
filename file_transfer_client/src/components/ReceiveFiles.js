@@ -3,64 +3,62 @@ import { calculatePercentage } from "../utils/calculatePercentage";
 
 function ReceiveFiles({ ws }) {
   const [chunks, setChunks] = useState([]);
-  const [from, setFrom] = useState("");
-  const [fileName, setFileName] = useState("");
-  const [percentage, setPercentage] = useState(0);
+  const [map, setMap] = useState(new Map());
 
   useEffect(() => {
+    const newMap = new Map(map);
     if (ws) {
       ws.onmessage = (evt) => {
         const message = evt.data;
         const jsonMessage = JSON.parse(message);
-        console.log("JSON: ", jsonMessage);
 
-        if (jsonMessage.fileName) {
-          setFileName(jsonMessage.fileName);
+        if (jsonMessage.type !== "clientChunk") {
+          return;
         }
 
-        if (jsonMessage.from) {
-          setFrom(jsonMessage.from);
+        if (!jsonMessage.fileName) {
+          return;
         }
 
-        setPercentage(
-          calculatePercentage(
+        if (!jsonMessage.from) {
+          return;
+        }
+
+        const chunk = jsonMessage.buffer.data;
+
+        if (!chunk || !Array.isArray(chunk)) {
+          return;
+        }
+
+        const uint8Array = new Uint8Array(chunk);
+
+        newMap.set(jsonMessage.fileName, {
+          percentage: calculatePercentage(
             jsonMessage.chunkIndex,
             jsonMessage.totalChunks
-          ).toFixed(0)
-        );
+          ).toFixed(0),
+          from: jsonMessage.from,
+          chunks: newMap.get(jsonMessage.fileName)?.chunks
+            ? [...newMap.get(jsonMessage.fileName).chunks, uint8Array]
+            : [uint8Array],
+        });
 
-        handleReceiveChunk(jsonMessage.buffer);
+        setMap(new Map(newMap));
       };
     }
-  }, [ws]);
+  }, [ws, map]);
 
-  const handleReceiveChunk = (chunk) => {
-    const data = chunk.data;
-    if (!data || !Array.isArray(data)) {
+  const handleDownload = (fileName) => {
+    const file = map.get(fileName);
+
+    if (file.chunks.length === 0) {
       return;
     }
 
-    // Convert to Uint8Array
-    const uint8Array = new Uint8Array(data);
-
-    setChunks((prevChunks) => [...prevChunks, uint8Array]);
-  };
-
-  const handleDownload = () => {
-    if (chunks.length === 0) {
-      return;
-    }
-
-    console.log("PPP ", percentage);
-    if (percentage !== "100") {
-      return;
-    }
-
-    const combinedBuffer = Uint8Array.from(chunks.flat());
-    combinedBuffer.slice(0, 20);
+    // TODO: Find other way for this shit
 
     // Combine chunks into a single Blob
-    const blob = new Blob(chunks, { type: "application/octet-stream" });
+    const blob = new Blob(file.chunks, { type: "application/octet-stream" });
 
     // Create a download link
     const url = URL.createObjectURL(blob);
@@ -77,29 +75,29 @@ function ReceiveFiles({ ws }) {
     URL.revokeObjectURL(url);
   };
 
-  if (!fileName) {
-    return;
-  }
+  // If map empty return
 
   return (
     <div className="w-full border border-black p-7">
       <p>Received files</p>
       <ul>
-        <li
-          className={`list-disc list-inside ${
-            percentage === "100" && "cursor-pointer"
-          }`}
-          onClick={handleDownload}
-        >
-          {from}
-          {": "}
-          {fileName}:{" "}
-          <span
-            className={percentage === "100" ? "text-green-500" : "text-black"}
+        {Array.from(map.entries()).map(([key, value]) => (
+          <li
+            onClick={() => handleDownload(key)}
+            key={key}
+            className={`list-disc list-inside ${
+              value.percentage === "100" && "cursor-pointer"
+            }`}
           >
-            {percentage}%
-          </span>
-        </li>
+            {key}{" "}
+            <span
+              className={`${value.percentage === "100" && "text-green-500"}`}
+            >
+              {value.percentage}%
+            </span>{" "}
+            {value.from}
+          </li>
+        ))}
       </ul>
     </div>
   );
