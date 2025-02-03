@@ -5,6 +5,7 @@ import UsersCollection from "./components/UsersCollection";
 import SendFiles from "./components/SendFiles";
 import ReceiveFiles from "./components/ReceiveFiles";
 import WatchCollectionStatus from "./components/WatchCollectionStatus";
+import isOnlineInCollection from "./utils/isOnlineInCollection";
 
 function App() {
   const [userName, serUserName] = useState("");
@@ -18,7 +19,7 @@ function App() {
       }
 
       setWs(null);
-      setCollection([]);
+      setCollection({});
     }
   }, [userName, ws]);
 
@@ -38,7 +39,7 @@ function App() {
             collection={collection}
             setCollection={setCollection}
           />
-          {collection.length !== 0 && (
+          {isOnlineInCollection(collection) && (
             <SendFiles ws={ws} collection={collection} />
           )}
 

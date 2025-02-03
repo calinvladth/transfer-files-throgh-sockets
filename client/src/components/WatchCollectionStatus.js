@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api";
+import config from "../config";
 
 function WatchCollectionStatus({ collection, setCollection }) {
   const [timeoutId, setTimeoutId] = useState(null);
@@ -7,33 +8,34 @@ function WatchCollectionStatus({ collection, setCollection }) {
   useEffect(() => {
     clearInterval(timeoutId);
 
+    if (JSON.stringify(collection) === "{}") {
+      return;
+    }
+
     const intervalId = setInterval(async () => {
-      for (const [key, value] of Object.entries(collection)) {
-        console.log(key, value);
+      for (const key of Object.keys(collection)) {
         const response = await api.checkUser(key);
         if (!response) {
           setCollection((prevValue) => ({
             ...prevValue,
-            [key]: { status: "offline" },
+            [key]: { status: config.COLLECTION_STATUS.OFFLINE },
           }));
-          return;
+          continue;
         }
 
         setCollection((prevValue) => ({
           ...prevValue,
-          [key]: { status: "online" },
+          [key]: { status: config.COLLECTION_STATUS.ONLINE },
         }));
       }
-    }, 5000);
+    }, config.CHECK_COLLECTION_STATUS_INTERVAL);
     setTimeoutId(intervalId);
 
     return () => {
-      // Clear timeout
       clearInterval(timeoutId);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collection, setCollection]);
-
-  //   async function checkCollectionStatus() {}
 
   return;
 }

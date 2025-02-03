@@ -36,7 +36,6 @@ function ReceiveFiles({ ws }) {
             : [uint8Array],
         });
 
-        console.log(newMap.get(jsonMessage.fileName));
         setMap(new Map(newMap));
       };
     }

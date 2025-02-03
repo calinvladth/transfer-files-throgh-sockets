@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../api";
+import config from "../config";
 
 function UsersCollection({ userName, collection, setCollection }) {
   const [connectTo, setConnectTo] = useState("");
@@ -32,10 +33,18 @@ function UsersCollection({ userName, collection, setCollection }) {
 
     setCollection((prevValue) => ({
       ...prevValue,
-      [connectTo]: { status: "online" },
+      [connectTo]: { status: config.COLLECTION_STATUS.ONLINE },
     }));
     setResponseMessage("");
     setConnectTo("");
+  }
+
+  function removeKeyFromCollection(key) {
+    setCollection((prevVal) => {
+      const newState = { ...prevVal };
+      delete newState[key];
+      return newState;
+    });
   }
 
   return (
@@ -64,13 +73,21 @@ function UsersCollection({ userName, collection, setCollection }) {
               {Object.entries(collection).map(([key, value]) => (
                 <li
                   key={key}
-                  className={`list-disc list-inside ${
-                    value.status === "online"
+                  className={`list-disc list-inside flex items-center justify-between gap-3 border-b border-black py-3 ${
+                    value.status === config.COLLECTION_STATUS.ONLINE
                       ? "text-green-500"
                       : "text-red-500"
                   }`}
                 >
                   {key}
+                  <span
+                    onClick={() => {
+                      removeKeyFromCollection(key);
+                    }}
+                    className="text-sm text-red-500 cursor-pointer"
+                  >
+                    [x]
+                  </span>
                 </li>
               ))}
             </ul>
