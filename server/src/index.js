@@ -10,14 +10,16 @@ global.users = new Map();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join("../file_transfer_client", "build")));
-
-// app.get('*', (req, res) => {
-//     res.sendFile(path.join('../file_transfer_client', 'build', 'index.html'));
-// });
+app.use(express.static(path.join("../client", "build")));
 
 app.post("/signup", services.signup);
 app.get("/check_user", services.checkUser);
+
+if (process.env.NODE_ENV === "production") {
+  app.get("*", (req, res) => {
+    res.sendFile(path.join("../client", "build", "index.html"));
+  });
+}
 
 const PORT = process.env.PORT || 3001;
 

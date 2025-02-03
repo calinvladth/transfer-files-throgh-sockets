@@ -3,3 +3,6 @@
 
 # misc
 .DS_Store
+
+# scripts
+/script.sh

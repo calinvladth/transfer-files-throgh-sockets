@@ -17,7 +17,7 @@ async function signup(name) {
 async function checkUser(user) {
   try {
     const response = await axios.get(
-      `http://localhost:3001/check_user?user=${user}`
+      `${config.URLS.API}/check_user?user=${user}`
     );
 
     return response.status === 200 && response.data === "ok";
