@@ -1,14 +1,6 @@
 ## File transfer through web sockets
 
-### Steps to start client
-
-1. `$ yarn install`
-2. `$ yarn start`
-
-### Steps to start server
-
-1. `$ yarn install`
-2. `$ yarn start`
+Transfer files to multiple devices using the browser
 
 ## How it works
 
@@ -18,9 +10,19 @@ The sending and receiving works on any direction because each connection has it'
 
 My use case: I want to transfer files easily across multiple devices and platforms.
 
+**The server will not store the files. When a chunk of file is received, the server will forward it to the collection.**
+
 ---
 
-**The server will not store the files. When a chunk of file is received, the server will forward it to the collection.**
+#### Steps to start client
+
+1. `$ yarn install`
+2. `$ yarn start`
+
+#### Steps to start server
+
+1. `$ yarn install`
+2. `$ yarn start`
 
 ## Server Endpoints
 
