@@ -10,8 +10,6 @@ function isOnlineInCollection(collection) {
     }
   }
 
-  console.log(isOnline);
-
   return isOnline;
 }
 

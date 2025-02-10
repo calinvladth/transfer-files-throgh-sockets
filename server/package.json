@@ -1,6 +1,8 @@
 {
   "name": "file_transfer_socket",
-  "packageManager": "yarn@4.3.0",
+  "version": "0.0.1",
+  "author": "Calin Vlad <calinvladth@icloud.com> (https://calinvladth.com)",
+  "homepage": "https://github.com/calinvladth/transfer-files-throgh-sockets",
   "main": "./src/index.js",
   "scripts": {
     "start": "nodemon ./src/index.js"
@@ -12,5 +14,6 @@
     "nodemon": "^3.1.9",
     "socket.io": "^4.8.1",
     "ws": "^8.18.0"
-  }
+  },
+  "license": "MIT"
 }

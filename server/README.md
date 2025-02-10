@@ -1,1 +1,4 @@
-# file_transfer_socket
+#### Server
+
+1. `$ yarn install`
+2. `$ yarn start`

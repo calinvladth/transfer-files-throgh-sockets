@@ -12,7 +12,6 @@ function signup(req, res) {
     return;
   }
 
-  console.log(req.body);
   res.status(201).send("go with it");
 }
 

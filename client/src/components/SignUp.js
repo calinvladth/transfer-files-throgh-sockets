@@ -55,8 +55,8 @@ function SignUp({ setUserName }) {
   }
 
   return (
-    <div className="w-full h-screen border border-black flex flex-col justify-center items-center">
-      <div className="w-1/3 border border-black p-10">
+    <div className="w-full h-screen border border-black flex flex-col justify-center items-center p-5">
+      <div className="w-full lg:w-1/3 md:w-3/5 border border-black p-10">
         <p className="pb-3">Sign up</p>
         <form onSubmit={submit} className="flex flex-col gap-3">
           <input
