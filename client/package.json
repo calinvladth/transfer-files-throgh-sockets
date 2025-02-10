@@ -2,7 +2,7 @@
   "name": "file_transfer_client",
   "version": "0.0.1",
   "author": "Calin Vlad <calinvladth@icloud.com> (https://calinvladth.com)",
-  "homepage": "https://github.com/calinvladth/transfer-files-throgh-sockets",
+  "homepage": "https://github.com/calinvladth/transfer-files-through-sockets",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",

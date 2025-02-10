@@ -24,6 +24,10 @@ My use case: I want to transfer files easily across multiple devices and platfor
 1. `$ yarn install`
 2. `$ yarn start`
 
+## Video walkthrough
+
+[![Watch the video](https://i.vimeocdn.com/video/1980609992-1c5e5431782b57f8fc9d46a9051c52a204c6694382619a7b3cbbda7e894ec6ec-d?mw=2000&mh=1127&q=70)](https://vimeo.com/1055107173)
+
 ## Server Endpoints
 
 ### /signup

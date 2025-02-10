@@ -2,7 +2,7 @@
   "name": "file_transfer_socket",
   "version": "0.0.1",
   "author": "Calin Vlad <calinvladth@icloud.com> (https://calinvladth.com)",
-  "homepage": "https://github.com/calinvladth/transfer-files-throgh-sockets",
+  "homepage": "https://github.com/calinvladth/transfer-files-through-sockets",
   "main": "./src/index.js",
   "scripts": {
     "start": "nodemon ./src/index.js"
